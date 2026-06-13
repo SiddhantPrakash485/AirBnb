@@ -1,0 +1,19 @@
+import express from "express";
+import upload from "../middleware/multer.js";
+import isAuth from "../middleware/isAuth.js";
+import { addListing } from "../controllers/listing.controller.js";
+
+let listingRouter = express.Router();
+
+listingRouter.post(
+  "/add",
+  isAuth,
+  upload.fields([
+    { name: "image1", maxcount: 1 },
+    { name: "image2", maxcount: 1 },
+    { name: "image3", maxcount: 1 },
+  ]),
+  addListing,
+);
+
+export default listingRouter;
