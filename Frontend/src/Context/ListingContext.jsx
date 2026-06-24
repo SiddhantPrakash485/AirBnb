@@ -23,7 +23,7 @@ function ListingContext({ children }) {
 
   let{serverUrl}=useContext(AuthDatacontext)
 
-  const addListing = async () => {
+  const handleAddListing = async () => {
     try {
       let formData = new FormData();
       formData.append("title", title);
@@ -56,7 +56,7 @@ function ListingContext({ children }) {
     city, SetCity,
     landmark, SetLandmark,
     category, setCategory,
-    hanleAddListing
+    handleAddListing
   };
   return (
     <div>

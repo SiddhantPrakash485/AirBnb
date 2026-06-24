@@ -62,10 +62,16 @@ function Nav() {
             <span>
               <GiHamburgerMenu className="h-[20px] w-[20px]" />
             </span>
-            {userData ==null && <span>
-              <CgProfile className="h-[23px] w-[23px]" />
-            </span>}
-            {userData!=null && <span className="w-[30px] h-[30px] bg-[#080808] text-[white] rounded-full flex justify-center items-center">{userData?.name.slice(0,1)}</span>}
+            {userData == null && (
+              <span>
+                <CgProfile className="h-[23px] w-[23px]" />
+              </span>
+            )}
+            {userData != null && (
+              <span className="w-[30px] h-[30px] bg-[#080808] text-[white] rounded-full flex justify-center items-center">
+                {userData?.name.slice(0, 1)}
+              </span>
+            )}
           </button>
           {showpopup && (
             <div className="w-[220px] h-[250px] absolute bg-[white] border-[1px] rounded-lg top-[110%] right-[3%] border-[#aaa9a9] z-10 md:right-[10%]">
