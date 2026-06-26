@@ -52,7 +52,10 @@ function Nav() {
           </button>
         </div>
         <div className="flex items-center justify-center gap-[10px] relative ">
-          <span className="text-[18px] cursor-pointer rounded-[50px] hover:bg-[#ded9d9] px-[8px] py-[5px] hidden md:block">
+          <span
+            className="text-[18px] cursor-pointer rounded-[50px] hover:bg-[#ded9d9] px-[8px] py-[5px] hidden md:block"
+            onClick={() => navigate("/listingpage1")}
+          >
             List Your Home
           </span>
           <button
@@ -76,20 +79,32 @@ function Nav() {
           {showpopup && (
             <div className="w-[220px] h-[250px] absolute bg-[white] border-[1px] rounded-lg top-[110%] right-[3%] border-[#aaa9a9] z-10 md:right-[10%]">
               <ul className="w-[100%] h-[100%] text-[17px] flex items-start justify-around py-[10px] flex-col">
-                <li
+                {!userData && <li
                   className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
-                  onClick={() => navigate("/login")}
+                  onClick={() => {
+                    navigate("/login");
+                    setShowpopup(false);
+                  }}
                 >
                   Login
-                </li>
-                <li
+                </li>}
+                {userData && <li
                   className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
-                  onClick={handlelogout}
+                  onClick={() => {
+                    handlelogout();
+                    setShowpopup(false);
+                  }}
                 >
                   Logout
-                </li>
+                </li>}
                 <div className="w-[100%] h-[1px] bg-[#c1c0c0]"></div>
-                <li className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer">
+                <li
+                  className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
+                  onClick={() => {
+                    navigate("/listingpage1");
+                    setShowpopup(false);
+                  }}
+                >
                   List your Home
                 </li>
                 <li className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer">

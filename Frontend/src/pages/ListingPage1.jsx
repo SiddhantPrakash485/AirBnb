@@ -1,14 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { listingDataContext } from "../Context/ListingContext.jsx";
 
-function Listingpage1() {
+function ListingPage1() {
   let navigate = useNavigate();
+  let {title, setTitle,
+    description, setDescription,
+    frontEndImage1, setFrontEndImage1,
+    frontEndImage2, setFrontEndImage2,
+    frontEndImage3, setFrontEndImage3,
+    backEndImage1, setBackEndImage1,
+    backEndImage2, setBackEndImage2,
+    backEndImage3, setBackEndImage3,
+    rent, setRent,
+    city, setCity,
+    landmark, setLandmark,
+    category, setCategory}=useContext(listingDataContext)
+    const handleImage1=(e)=>{
+      let file=e.target.files[0]
+      setBackEndImage1(file)
+      setFrontEndImage1(URL.createObjectURL(file))
+    }
+    const handleImage2=(e)=>{
+      let file=e.target.files[0]
+      setBackEndImage2(file)
+      setFrontEndImage2(URL.createObjectURL(file))
+    }
+    const handleImage3=(e)=>{
+      let file=e.target.files[0]
+      setBackEndImage3(file)
+      setFrontEndImage3(URL.createObjectURL(file))
+    }
   return (
     <div className="w-[100%] h-[100vh] bg-white flex items-center justify-center relative overflow-auto">
       <form
         action=""
-        className="max-w-[900px] w-[90%] h-[550px] flex items-center justify-start flex-col md:items-start gap-[10px] overflow-auto mt-[50px]"
+        className="max-w-[900px] w-[90%] h-[550px] flex items-center justify-start flex-col md:items-start gap-[10px] overflow-auto mt-[50px]" onSubmit={(e)=>{e.preventDefault() 
+          navigate("/listingpage2")}}
       >
         <div
           className="w-[50px] h-[50px] bg-[red] cursor-pointer absolute  top-[5%] left-[20px] rounded-[50%] flex items-center justify-center "
@@ -27,7 +56,7 @@ function Listingpage1() {
             type="text"
             id="title"
             className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
-            required
+            required onChange={(e)=>setTitle(e.target.value) }value={title} placeholder="_bhk house or best title"
           />
         </div>
         <div className="w-[90%] flex items-start justify-start flex-col gap-[10px] ">
@@ -38,7 +67,7 @@ function Listingpage1() {
             name=""
             id="des"
             className="w-[90%] h-[80px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
-            required
+            required onChange={(e)=>setDescription(e.target.value) }value={description}
           ></textarea>
         </div>
         <div className="w-[90%] flex items-start justify-start flex-col gap-[10px] ">
@@ -50,7 +79,7 @@ function Listingpage1() {
               type="file"
               id="Image1"
               className="w-[90%] text-[15px] px-[10px]"
-              required
+              required onChange={handleImage1}
             />
           </div>
         </div>
@@ -63,7 +92,7 @@ function Listingpage1() {
               type="file"
               id="Image2"
               className="w-[90%] text-[15px] px-[10px]"
-              required
+              required onChange={handleImage2}
             />
           </div>
         </div>
@@ -76,7 +105,7 @@ function Listingpage1() {
               type="file"
               id="Image3"
               className="w-[90%] text-[15px] px-[10px]"
-              required
+              required onChange={handleImage3}
             />
           </div>
         </div>
@@ -85,10 +114,10 @@ function Listingpage1() {
             Rent
           </label>
           <input
-            type="text"
+            type="number"
             id="rent"
             className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
-            required
+            required onChange={(e)=>setRent(e.target.value) }value={rent} placeholder="Rs.______/day"
           />
         </div>
         <div className="w-[90%] flex items-start justify-start flex-col gap-[10px]">
@@ -99,7 +128,7 @@ function Listingpage1() {
             type="text"
             id="city"
             className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
-            required
+            required onChange={(e)=>setCity(e.target.value) }value={city} placeholder="City,Country"
           />
         </div>
         <div className="w-[90%] flex items-start justify-start flex-col gap-[10px]">
@@ -110,10 +139,10 @@ function Listingpage1() {
             type="text"
             id="landmark"
             className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
-            required
+            required onChange={(e)=>setLandmark(e.target.value) }value={landmark}
           />
         </div>
-        <button className="px-[50px] py-[10px] text-[18px] bg-[green] text-[white] md:px-[100px] rounded-lg">
+        <button className="px-[50px] py-[10px] text-[18px] bg-[red] text-[white] md:px-[100px] rounded-lg">
           Next
         </button>
       </form>
@@ -121,4 +150,4 @@ function Listingpage1() {
   );
 }
 
-export default Listingpage1;
+export default ListingPage1;

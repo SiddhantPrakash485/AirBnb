@@ -13,8 +13,10 @@ function LogIn() {
   let { serverUrl } = useContext(AuthDatacontext);
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
-  let {userData, setUserData} = useContext(userDataContext);
+  let { userData, setUserData } = useContext(userDataContext);
+  let { loading, setLoading } = useContext(AuthDatacontext);
   const handleLogIn = async (e) => {
+    setLoading(true);
     try {
       e.preventDefault();
       let result = await axios.post(
@@ -25,10 +27,12 @@ function LogIn() {
         },
         { withCredentials: true },
       );
+      setLoading(false);
       setUserData(result.data);
       navigate("/");
       console.log(result);
     } catch (error) {
+      setLoading(false);
       console.log(error.response.data);
     }
   };
@@ -84,8 +88,11 @@ function LogIn() {
             />
           )}
         </div>
-        <button className="px-[50px] py-[10px] text-[18px] bg-[green] text-[white] md:px-[100px] rounded-lg">
-          Login
+        <button
+          className="px-[50px] py-[10px] text-[18px] bg-[green] text-[white] md:px-[100px] rounded-lg"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "LogIn"}
         </button>
         <p className="text-[18px]">
           Create new account
