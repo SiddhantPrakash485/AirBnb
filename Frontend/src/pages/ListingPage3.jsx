@@ -42,7 +42,7 @@ function ListingPage3() {
         <FaArrowLeftLong className="w-[25px] h-[25px] text-[white]" />
       </div>
       <div className="w-[95%] flex items-start justify-start text-[25px] md:w-[80%] mb-[10px]">
-        <h1 className="text-[20px] text-[#272727] md:text-[30px] text-ellipsis text-nowrap overflow-hidden">
+        <h1 className="text-[20px] text-[#272727] md:text-[30px] text-ellipsis text-nowrap overflow-hidden px-[70px] md:px-[0px]">
           {`In ${landmark.toUpperCase()} ,${city.toUpperCase()}`}
         </h1>
       </div>
@@ -64,7 +64,7 @@ function ListingPage3() {
       <div className="w-[95%] flex items-start justify-start text-[18px] md:w-[80%] md:text-[25px] text-gray-800">{`${description.toUpperCase()} `}</div>
       <div className="w-[95%] flex items-start justify-start text-[18px] md:w-[80%] md:text-[25px]">{`Rs.${rent}/day `}</div>
       <div className="w-[95%] h-[50px] flex items-center justify-start px-[110px]">
-        <button className="px-[50px] py-[10px] text-[18px] bg-[red] text-[white] md:px-[100px] rounded-lg "onClick={handleAddListing} disabled={adding}>
+        <button className="px-[30px] py-[10px] text-[18px] bg-[red] text-[white] md:px-[100px] rounded-lg text-nowrap"onClick={handleAddListing} disabled={adding}>
           {adding?"Adding...":"Add List"}
         </button>
       </div>

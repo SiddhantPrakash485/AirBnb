@@ -27,7 +27,7 @@ export const signUp = async (req, res) => {
 export const login = async (req, res) => {
   try {
     let { email, password } = req.body;
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).populate("listing","title image1 image2 image3 description rent category landmark city");
     if (!user) {
       return res.status(400).json({ message: "User doesn't exist!" });
     }

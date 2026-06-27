@@ -5,6 +5,7 @@ import { createContext } from "react";
 import { AuthDatacontext } from "./AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const listingDataContext = createContext();
 
@@ -23,6 +24,10 @@ function ListingContext({ children }) {
   let [landmark, setLandmark] = useState("");
   let [category, setCategory] = useState("");
   let [adding, setAdding] = useState(false);
+  let [updating, setUpdating] = useState(false);
+  let [listingData, setListingData] = useState([]);
+  let [newListData, setNewListData] = useState([]);
+  let [cardDetails, setCardDetails] = useState(null);
   let { serverUrl } = useContext(AuthDatacontext);
 
   const handleAddListing = async () => {
@@ -57,12 +62,41 @@ function ListingContext({ children }) {
       setLandmark("");
       setCity("");
       setCategory("");
-    } 
-    catch (error) {
+    } catch (error) {
       setAdding(false);
       console.log(error);
     }
   };
+
+  let getListing = async () => {
+    try {
+      let result = await axios.get(serverUrl + "/api/listing/get", {
+        withCredentials: true,
+      });
+      setListingData(result.data);
+      setNewListData(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleViewCard = async (id) => {
+    try {
+      let result = await axios.get(
+        serverUrl + `/api/listing/findlistingbyid/${id}`,
+        { withCredentials: true },
+      );
+      setCardDetails(result.data);
+      console.log(result.data);
+      navigate("/viewcard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getListing();
+  }, [adding]);
 
   let value = {
     title,
@@ -91,7 +125,17 @@ function ListingContext({ children }) {
     setCategory,
     adding,
     setAdding,
+    updating,
+    setUpdating,
     handleAddListing,
+    listingData,
+    setListingData,
+    newListData,
+    setNewListData,
+    getListing,
+    cardDetails,
+    setCardDetails,
+    handleViewCard,
   };
   return (
     <div>
