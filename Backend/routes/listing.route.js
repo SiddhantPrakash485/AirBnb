@@ -1,7 +1,7 @@
 import express from "express";
 import upload from "../middleware/multer.js";
 import isAuth from "../middleware/isAuth.js";
-import { addListing, findListing, getListing, updateListing } from "../controllers/listing.controller.js";
+import { addListing, deleteListing, findListing, getListing, updateListing } from "../controllers/listing.controller.js";
 
 let listingRouter = express.Router();
 
@@ -27,4 +27,6 @@ listingRouter.post(
   ]),
   updateListing,
 );
+listingRouter.delete("/delete/:id",isAuth,deleteListing);
+
 export default listingRouter;

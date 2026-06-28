@@ -22,15 +22,41 @@ function ViewCard() {
   let [landmark, setLandmark] = useState(cardDetails.landmark);
   let { serverUrl } = useContext(AuthDatacontext);
   let { updating, setUpdating } = useContext(listingDataContext);
+  let { deleting, setDeleting } = useContext(listingDataContext);
+
+  const handleDeleteListing = async () => {
+    setDeleting(true);
+    try {
+      let result = await axios.delete(
+        serverUrl + `/api/listing/delete/${cardDetails._id}`,
+        {
+          withCredentials: true,
+        },
+      );
+      setDeleting(false);
+      navigate("/");
+      console.log(result.data);
+      
+    } catch (error) {
+      setDeleting(false);
+      console.log(error);
+    }
+  };
 
   const hanldeUpdateListing = async () => {
     try {
       setUpdating(true);
       let formData = new FormData();
       formData.append("title", title);
-      formData.append("image1", backEndImage1);
-      formData.append("image2", backEndImage2);
-      formData.append("image3", backEndImage3);
+      if (backEndImage1) {
+        formData.append("image1", backEndImage1);
+      }
+      if (backEndImage2) {
+        formData.append("image2", backEndImage2);
+      }
+      if (backEndImage3) {
+        formData.append("image3", backEndImage3);
+      }
       formData.append("description", description);
       formData.append("rent", rent);
       formData.append("city", city);
@@ -248,12 +274,19 @@ function ViewCard() {
                 value={landmark}
               />
             </div>
-            <button
-              className="px-[50px] py-[10px] text-[18px] bg-[red] text-[white] md:px-[100px] rounded-lg"
-              onClick={hanldeUpdateListing} disabled={updating}
-            >
-              {updating?"Updating.....":"Update Listing"}
-            </button>
+            <div className="w-[100%] flex items-center justify-center gap-[30px] mt-[20px]">
+              <button
+                className="px-[10px] py-[10px] text-[15px] bg-[red] text-[white] md:px-[100px] md:text-[18px] rounded-lg text-nowrap"
+                onClick={hanldeUpdateListing}
+                disabled={updating}
+              >
+                {updating ? "Updating....." : "Update Listing"}
+              </button>
+
+              <button className="px-[10px] py-[10px] text-[15px] bg-[red] text-[white] md:px-[100px] md:text-[18px] rounded-lg text-nowrap" onClick={handleDeleteListing} disabled={deleting}>
+                {deleting?"Deleting..":"Delete Listing"}
+              </button>
+            </div>
           </form>
         </div>
       )}

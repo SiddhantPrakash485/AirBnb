@@ -25,6 +25,7 @@ function ListingContext({ children }) {
   let [category, setCategory] = useState("");
   let [adding, setAdding] = useState(false);
   let [updating, setUpdating] = useState(false);
+  let [deleting, setDeleting] = useState(false);
   let [listingData, setListingData] = useState([]);
   let [newListData, setNewListData] = useState([]);
   let [cardDetails, setCardDetails] = useState(null);
@@ -96,7 +97,7 @@ function ListingContext({ children }) {
 
   useEffect(() => {
     getListing();
-  }, [adding]);
+  }, [adding, updating,deleting]);
 
   let value = {
     title,
@@ -136,6 +137,8 @@ function ListingContext({ children }) {
     cardDetails,
     setCardDetails,
     handleViewCard,
+    deleting,
+    setDeleting,
   };
   return (
     <div>
