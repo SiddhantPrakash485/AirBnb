@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import AirBNBlogo from "../assets/AirBNBlogo.jpeg";
 import { FiSearch } from "react-icons/fi";
@@ -24,9 +24,10 @@ function Nav() {
   let navigate = useNavigate();
   let { userData, setUserData } = useContext(userDataContext);
   let [cate, setCate] = useState();
-  let { listingData, setListingData, setNewListData, newListData } =
+  let { listingData, setListingData, setNewListData, newListData,searchData,handleSearch,handleViewCard } =
     useContext(listingDataContext);
   let { serverUrl } = useContext(AuthDatacontext);
+  let [input,SetInput]=useState("")
   const handlelogout = async () => {
     try {
       let result = await axios.post(serverUrl + "/api/auth/logout", {
@@ -47,8 +48,18 @@ function Nav() {
       setNewListData(listingData.filter((list) => list.category == category));
     }
   };
+  const handleClick = (id) => {
+    if (userData) {
+      handleViewCard(id);
+    } else {
+      navigate("/login");
+    }
+  };
+  useEffect(()=>{
+    handleSearch(input)
+  },[input])
   return (
-    <div className="fixed top-0 bg-[white]">
+    <div className="fixed top-0 bg-[white] z-[20]">
       <div className="w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] px-[20px] flex items-center justify-between md:px-[40px]">
         <div>
           <img src={AirBNBlogo} className="w-[130px]" />
@@ -58,7 +69,7 @@ function Nav() {
           <input
             type="text"
             className="w-[100%] py-[10px] px-[30px] border-[2px] border-[#bdbaba] cutline-none rounded-[30px] overflow-auto text-[17px]"
-            placeholder="Any Where | Any Location | Any City"
+            placeholder="Any Where | Any Location | Any City" onChange={(e)=>{SetInput(e.target.value)}} value={input}
           />
           <button className="absolute p-[10px] rounded-[50px] bg-[red] right-[3%] top-[8px]">
             <FiSearch className="w-[20px] h-[20px] text-[white]" />
@@ -124,27 +135,46 @@ function Nav() {
                 >
                   List your Home
                 </li>
-                <li className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
-                onClick={() => {
+                <li
+                  className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
+                  onClick={() => {
                     navigate("/mylisting");
                     setShowpopup(false);
-                  }}>
+                  }}
+                >
                   My Listings
                 </li>
-                <li className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer">
-                  Check Bookings
+                <li
+                  className="w-[100%] px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
+                  onClick={() => {
+                    navigate("/mybooking");
+                    setShowpopup(false);
+                  }}
+                >
+                  My Bookings
                 </li>
               </ul>
             </div>
           )}
         </div>
+        {searchData?.length>0 && <div className="w-[100vw] h-[450px] flex flex-col gap-[20px] absolute top-[50%] overflow-auto left-[0] justify-start items-center">
+          <div className="max-w-[700px] w-[100vw] h-[300px] overflow-hiddenflex flex-col bg-[#fefdfd] p-[20px] rounded-lg border-[1px] border-[#a2a1a1] cursor-pointer" >
+            {
+              searchData.map((search)=>(
+                <div className="border-b border-[black] p-[10px]" onClick={()=>handleClick(search._id)}>
+                  {search.title} in {search.landmark},{search.city}
+                </div>
+              ))
+            }
+          </div>
+        </div>}
       </div>
       <div className="w-[100%] h-[60px] flex items-center justify-center md:hidden">
         <div className="w-[80%] relative ">
           <input
             type="text"
             className="w-[100%] py-[10px] px-[30px] border-[2px] border-[#bdbaba] cutline-none rounded-[30px] overflow-auto text-[17px]"
-            placeholder="Any Where | Any Location | Any City"
+            placeholder="Any Where | Any Location | Any City" onChange={(e)=>{SetInput(e.target.value)}} value={input}
           />
           <button className="absolute p-[10px] rounded-[50px] bg-[red] right-[3%] top-[8px]">
             <FiSearch className="w-[20px] h-[20px] text-[white]" />
@@ -180,38 +210,50 @@ function Nav() {
           <h3>Farm House</h3>
         </div>
 
-        <div className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "poolHouse" ? "border-b-[1px]" : ""}`}
-          onClick={() => handleCategory("poolHouse")}>
+        <div
+          className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "poolHouse" ? "border-b-[1px]" : ""}`}
+          onClick={() => handleCategory("poolHouse")}
+        >
           <MdPool className="w-[30px] h-[30px] text-black" />
           <h3>Pool House</h3>
         </div>
 
-        <div className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "rooms" ? "border-b-[1px]" : ""}`}
-          onClick={() => handleCategory("rooms")}>
+        <div
+          className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "rooms" ? "border-b-[1px]" : ""}`}
+          onClick={() => handleCategory("rooms")}
+        >
           <MdBedroomParent className="w-[30px] h-[30px] text-black" />
           <h3>Rooms</h3>
         </div>
 
-        <div className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "flat" ? "border-b-[1px]" : ""}`}
-          onClick={() => handleCategory("flat")}>
+        <div
+          className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "flat" ? "border-b-[1px]" : ""}`}
+          onClick={() => handleCategory("flat")}
+        >
           <BiBuildingHouse className="w-[30px] h-[30px] text-black" />
           <h3>Flat</h3>
         </div>
 
-        <div className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "pg" ? "border-b-[1px]" : ""}`}
-          onClick={() => handleCategory("pg")}>
+        <div
+          className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "pg" ? "border-b-[1px]" : ""}`}
+          onClick={() => handleCategory("pg")}
+        >
           <IoBedOutline className="w-[30px] h-[30px] text-black" />
           <h3>PG</h3>
         </div>
 
-        <div className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "cabin" ? "border-b-[1px]" : ""}`}
-          onClick={() => handleCategory("cabin")}>
+        <div
+          className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "cabin" ? "border-b-[1px]" : ""}`}
+          onClick={() => handleCategory("cabin")}
+        >
           <GiWoodCabin className="w-[30px] h-[30px] text-black" />
           <h3>Cabin</h3>
         </div>
 
-        <div className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "shops" ? "border-b-[1px]" : ""}`}
-          onClick={() => handleCategory("shops")}>
+        <div
+          className={`flex items-center justify-center flex-col hover:border-b border-[#a6a5a5] text-[13px] ${cate == "shops" ? "border-b-[1px]" : ""}`}
+          onClick={() => handleCategory("shops")}
+        >
           <GiShop className="w-[30px] h-[30px] text-black" />
           <h3>Shops</h3>
         </div>

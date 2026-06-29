@@ -23,6 +23,9 @@ function Home() {
             image2={list.image2}
             image3={list.image3}
             rent={list.rent}
+            ratings={list.ratings}
+            isBooked={list.isBooked}
+            host={list.host}
           />
         ))}
       </div>

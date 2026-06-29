@@ -6,6 +6,7 @@ import { AuthDatacontext } from "./AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export const listingDataContext = createContext();
 
@@ -30,7 +31,7 @@ function ListingContext({ children }) {
   let [newListData, setNewListData] = useState([]);
   let [cardDetails, setCardDetails] = useState(null);
   let { serverUrl } = useContext(AuthDatacontext);
-
+  let [searchData, setSearchData] = useState([]);
   const handleAddListing = async () => {
     setAdding(true);
     try {
@@ -51,6 +52,7 @@ function ListingContext({ children }) {
       console.log(result);
       setAdding(false);
       navigate("/");
+      toast.success("Listing Sucessfully Added");
       setTitle("");
       setDescription("");
       setFrontEndImage1(null);
@@ -66,6 +68,7 @@ function ListingContext({ children }) {
     } catch (error) {
       setAdding(false);
       console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -80,7 +83,17 @@ function ListingContext({ children }) {
       console.log(error);
     }
   };
-
+  const handleSearch = async (query) => {
+    try {
+      let result = await axios.get(
+        serverUrl + `/api/listing/search?query=${data}`,
+      );
+      setSearchData(result.data);
+    } catch (error) {
+      setSearchData(null);
+      console.log(error);
+    }
+  };
   const handleViewCard = async (id) => {
     try {
       let result = await axios.get(
@@ -97,7 +110,7 @@ function ListingContext({ children }) {
 
   useEffect(() => {
     getListing();
-  }, [adding, updating,deleting]);
+  }, [adding, updating, deleting]);
 
   let value = {
     title,
@@ -139,6 +152,9 @@ function ListingContext({ children }) {
     handleViewCard,
     deleting,
     setDeleting,
+    searchData,
+    setSearchData,
+    handleSearch,
   };
   return (
     <div>

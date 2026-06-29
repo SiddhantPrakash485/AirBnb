@@ -119,11 +119,46 @@ export const deleteListing = async (req, res) => {
       },
       { returnDocument: "after" },
     );
-    if(!user){
-      return res.status(404).json({message:"user not found"})
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
     }
-    return res.status(201).json({mesage:"Deleted Successfully"})
+    return res.status(201).json({ mesage: "Deleted Successfully" });
   } catch (error) {
     return res.status(400).json({ message: `Deletelisting error ${error}` });
+  }
+};
+
+export const ratingListing = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let { ratings } = req.body;
+    let listing = await Listing.findById(id);
+    if (!listing) {
+      return res.status(404).json({ message: "listing not found" });
+    }
+    listing.ratings = Number(ratings);
+    await listing.save();
+    return res.status(200).json({ ratings: listing.ratings });
+  } catch (error) {
+    return res.status(500).json({ message: `Rating error ${error}` });
+  }
+};
+export const search = async (req,res) => {
+  try {
+    const { query } = req.query;
+    if (!query) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+    const listing = await Listing.find({
+      $or: [
+        { landmark: { $regex: query, $options: "i" } },
+        { city: { $regex: query, $options: "i" } },
+        { title: { $regex: query, $options: "i" } },
+      ],
+    });
+    return res.status(200).json(listing);
+  } catch (error) {
+    console.error("Search error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

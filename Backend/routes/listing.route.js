@@ -1,7 +1,15 @@
 import express from "express";
 import upload from "../middleware/multer.js";
 import isAuth from "../middleware/isAuth.js";
-import { addListing, deleteListing, findListing, getListing, updateListing } from "../controllers/listing.controller.js";
+import {
+  addListing,
+  deleteListing,
+  findListing,
+  getListing,
+  ratingListing,
+  search,
+  updateListing,
+} from "../controllers/listing.controller.js";
 
 let listingRouter = express.Router();
 
@@ -16,7 +24,7 @@ listingRouter.post(
   addListing,
 );
 listingRouter.get("/get", getListing);
-listingRouter.get("/findlistingbyid/:id",isAuth, findListing);
+listingRouter.get("/findlistingbyid/:id", isAuth, findListing);
 listingRouter.post(
   "/update/:id",
   isAuth,
@@ -27,6 +35,7 @@ listingRouter.post(
   ]),
   updateListing,
 );
-listingRouter.delete("/delete/:id",isAuth,deleteListing);
-
+listingRouter.delete("/delete/:id", isAuth, deleteListing);
+listingRouter.post("/ratings/:id", isAuth, ratingListing);
+listingRouter.get("/search", search);
 export default listingRouter;

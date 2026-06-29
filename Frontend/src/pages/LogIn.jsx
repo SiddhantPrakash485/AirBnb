@@ -6,6 +6,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { AuthDatacontext } from "../Context/AuthContext.jsx";
 import axios from "axios";
 import { userDataContext } from "../Context/UserContext.jsx";
+import { toast } from "react-toastify";
 
 function LogIn() {
   let [show, setShow] = useState(false);
@@ -31,9 +32,11 @@ function LogIn() {
       setUserData(result.data);
       navigate("/");
       console.log(result);
+      toast.success("LogIn Sucessfully")
     } catch (error) {
       setLoading(false);
       console.log(error.response.data);
+      toast.error(error.response.data.message )
     }
   };
   return (
